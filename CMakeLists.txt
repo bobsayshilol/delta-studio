@@ -345,9 +345,11 @@ if(ENABLE_OPENGL)
         include/yds_opengl_texture.h
     )
 
-    target_link_libraries(delta-core PRIVATE
-        OpenGL::GL
-    )
+    if (NOT EMSCRIPTEN)
+        target_link_libraries(delta-core PRIVATE
+            OpenGL::GL
+        )
+    endif()
 
     target_include_directories(delta-core PRIVATE dependencies/libraries/OpenGL/include)
 
@@ -465,8 +467,11 @@ if (ENABLE_PLAT_SDL)
 endif()
 
 if (ENABLE_SDL)
-    find_package(SDL2 REQUIRED)
-    find_package(SDL2_image REQUIRED)
+    # Emscripten provides these by default, but it fails if we try to find them
+    if (NOT EMSCRIPTEN)
+        find_package(SDL2 REQUIRED)
+        find_package(SDL2_image REQUIRED)
+    endif()
 
     target_include_directories(delta-core PRIVATE
         ${SDL2_INCLUDE_DIRS}

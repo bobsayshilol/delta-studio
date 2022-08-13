@@ -4,8 +4,9 @@
 #include "../include/yds_sdl_monitor.h"
 #include "../include/yds_sdl_window.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_events.h>
+#define __unaligned __blahblah // TODO: emscripten bodge
+#include <SDL.h>
+#include <SDL_events.h>
 
 ysSdlWindowSystem::ysSdlWindowSystem() : ysWindowSystem(Platform::Sdl) {
     SDL_Init(SDL_INIT_VIDEO);
