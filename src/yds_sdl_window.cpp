@@ -1,5 +1,9 @@
 #include "../include/yds_sdl_window.h"
 
+#define __unaligned __blahblah // TODO: emscripten bodge
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 ysSdlWindow::ysSdlWindow() : ysWindow(Platform::Sdl) {
     /* void */
 }
@@ -51,6 +55,12 @@ ysError ysSdlWindow::InitializeWindow(ysWindow *parent, std::string title, Windo
         break;
     }
 
+#if __EMSCRIPTEN__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    //SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
+#endif
     m_window = SDL_CreateWindow(title.c_str(), x, y, width, height, flags);
 
     return YDS_ERROR_RETURN(ysError::None);
