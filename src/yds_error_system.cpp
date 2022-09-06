@@ -3,6 +3,7 @@
 #include "../include/yds_error_handler.h"
 
 #include <assert.h>
+#include <cstdio>
 
 ysErrorSystem *ysErrorSystem::g_instance = nullptr;
 
@@ -35,6 +36,8 @@ ysError ysErrorSystem::RaiseError(ysError error, unsigned int line, ysObject *ob
         for (int i = 0; i < m_errorHandlers.GetNumObjects(); i++) {
             m_errorHandlers.Get(i)->OnError(error, line, object, file);
         }
+
+        printf("ERROR: %s:%i: %s\n", file, line, msg);
     }
 
     if (affectStack) {
