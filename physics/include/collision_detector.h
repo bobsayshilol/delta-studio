@@ -1,6 +1,10 @@
 #ifndef DELTA_BASIC_COLLISION_DETECTOR_H
 #define DELTA_BASIC_COLLISION_DETECTOR_H
 
+#ifdef _WIN32
+#define NOMINMAX
+#endif
+
 #include "collision_primitives.h"
 #include "rigid_body.h"
 
