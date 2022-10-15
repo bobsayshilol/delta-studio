@@ -15,6 +15,8 @@ public:
     void SetPhysicalSize(int w, int h);
     void SetDeviceName(std::string name);
 
+    void InitializeDeviceName(uint32_t);
+
     int GetPhysicalWidth() const { return m_physicalWidth; }
     int GetPhysicalHeight() const { return m_physicalHeight; }
 
