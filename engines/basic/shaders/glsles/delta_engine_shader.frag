@@ -159,7 +159,7 @@ void main(void) {
 		vec4 diffuse = texture(diffuseTex, ex_Tex).rgba;
 		baseColor = vec4(srgbToLinear(diffuse.rgb), diffuse.a) * BaseColor;
 	}
-	else {
+	{
 		baseColor = BaseColor;
 	}
 
