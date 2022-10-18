@@ -4,6 +4,7 @@
 #if defined(__ARM_NEON) || defined(__ARM_NEON__)
 #include "sse2neon.h"
 #else
+#define __unaligned __blahblah // TODO: emscripten bodge
 #include <immintrin.h>
 #endif
 

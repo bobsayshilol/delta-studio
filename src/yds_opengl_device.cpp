@@ -13,6 +13,7 @@
 #endif
 
 #include "OpenGL.h"
+#define __unaligned __blahblah // TODO: emscripten bodge
 #include <SDL.h>
 #include <SDL_image.h>
 
