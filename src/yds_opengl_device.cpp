@@ -1229,7 +1229,12 @@ int ysOpenGLDevice::GetFramebufferName(int slot) {
 // TEMP
 void ysOpenGLDevice::Draw(int numFaces, int indexOffset, int vertexOffset) {
     if (m_activeVertexBuffer != nullptr) {
+#if __EMSCRIPTEN__
+        // GLES: no support for base vertex
+        glDrawElements(GL_TRIANGLES, numFaces * 3, GL_UNSIGNED_SHORT, (void *)(indexOffset * 2));
+#else
         m_realContext->glDrawElementsBaseVertex(GL_TRIANGLES, numFaces * 3, GL_UNSIGNED_SHORT, (void *)(indexOffset * 2), vertexOffset);
+#endif
     }
 }
 

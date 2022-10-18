@@ -361,6 +361,13 @@ ysError dbasic::AssetManager::LoadSceneFile(const char *fname, bool placeInVram)
             file.read((char *)(verticesFile + currentVertexByteOffset), vertexDataSize);
             file.read((char *)(indicesFile + currentIndexOffset), sizeof(unsigned short) * header.NumFaces * 3);
 
+            // Do the adjustment here
+            // TODO: u16 overflow checking
+            const int baseVertex = currentVertexByteOffset / stride;
+            for (int idx = 0; idx < header.NumFaces * 3; idx++) {
+                *(indicesFile + currentIndexOffset + idx) += baseVertex;
+            }
+
             if (header.NumBones > 0) {
                 newModelAsset->m_boneMap.Preallocate(header.NumBones);
 
@@ -380,7 +387,7 @@ ysError dbasic::AssetManager::LoadSceneFile(const char *fname, bool placeInVram)
             newModelAsset->m_vertexCount = header.NumVertices;
             newModelAsset->m_faceCount = header.NumFaces;
             newModelAsset->m_baseIndex = currentIndexOffset;
-            newModelAsset->m_baseVertex = currentVertexByteOffset / stride;
+            newModelAsset->m_baseVertex = 0;//currentVertexByteOffset / stride; // ignore base vertex - no GLES support
             newModelAsset->m_vertexBuffer = vertexBuffer;
             newModelAsset->m_indexBuffer = indexBuffer;
 
