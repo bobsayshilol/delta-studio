@@ -952,7 +952,7 @@ ysError ysD3D10Device::CreateInputLayout(ysInputLayout **newInputLayout, ysShade
     for(int i = 0; i < nChannels; i++) {
         const ysRenderGeometryChannel *channel = format->GetChannel(i);
 
-        descArray[i].SemanticName = channel->GetName();
+        descArray[i].SemanticName = channel->GetName().c_str();
         descArray[i].SemanticIndex = 0;
         descArray[i].Format = ConvertInputLayoutFormat(channel->GetFormat());
         descArray[i].InputSlot = 0;
