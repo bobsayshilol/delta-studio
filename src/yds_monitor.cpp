@@ -24,6 +24,10 @@ ysMonitor::ysMonitor(Platform platform) : ysWindowSystemObject("DISPLAY_MONITOR"
     m_logicalHeight = 0;
 }
 
+void ysMonitor::InitializeDeviceName(uint32_t numBytes) {
+    m_deviceName = std::string(numBytes,'\0');
+}
+
 void ysMonitor::SetOrigin(int x, int y) {
     m_originx = x;
     m_originy = y;
