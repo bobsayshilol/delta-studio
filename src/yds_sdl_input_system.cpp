@@ -4,7 +4,7 @@
 #include "../include/yds_key_maps.h"
 #include "../include/yds_window_system.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 ysSdlInputSystem::ysSdlInputSystem() : ysInputSystem(Platform::Sdl) {
     /* void */
