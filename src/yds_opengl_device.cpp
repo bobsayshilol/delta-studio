@@ -816,6 +816,13 @@ ysError ysOpenGLDevice::LinkProgram(ysShaderProgram *program) {
     YDS_NESTED_ERROR_CALL(ysDevice::LinkProgram(program));
 
     ysOpenGLShaderProgram *openglProgram = static_cast<ysOpenGLShaderProgram *>(program);
+#if __EMSCRIPTEN__
+    // TODO: bodge these for now
+    m_realContext->glBindAttribLocation(openglProgram->m_handle, 0, "in_Position");
+    m_realContext->glBindAttribLocation(openglProgram->m_handle, 1, "in_Tex");
+    m_realContext->glBindAttribLocation(openglProgram->m_handle, 2, "in_Color");
+    m_realContext->glBindAttribLocation(openglProgram->m_handle, 2, "in_Normal");
+#endif
     m_realContext->glLinkProgram(openglProgram->m_handle);
 
     GLint status;
