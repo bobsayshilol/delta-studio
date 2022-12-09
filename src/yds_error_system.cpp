@@ -31,8 +31,12 @@ void ysErrorSystem::Destroy() {
     delete [] g_instance;
 }
 
+#include <cstdio>
 ysError ysErrorSystem::RaiseError(ysError error, unsigned int line, ysObject *object, const char *file, const char *msg, bool affectStack) {
     if (error != ysError::None) {
+        printf("%s:%i:  %s\n", file, line, msg);
+        fflush(stdout); // urgh
+        assert(false);
         for (int i = 0; i < m_errorHandlers.GetNumObjects(); i++) {
             m_errorHandlers.Get(i)->OnError(error, line, object, file);
         }

@@ -661,6 +661,8 @@ ysError ysOpenGLDevice::EditBufferData(ysGPUBuffer *buffer, char *data) {
     return YDS_ERROR_RETURN(ysError::None);
 }
 
+#include <cassert>
+
 // Shaders
 ysError ysOpenGLDevice::CreateVertexShader(ysShader **newShader, const char *shaderFilename, const char *shaderName) {
     YDS_ERROR_DECLARE("CreateVertexShader");
@@ -696,8 +698,10 @@ ysError ysOpenGLDevice::CreateVertexShader(ysShader **newShader, const char *sha
     m_realContext->glGetShaderiv(handle, GL_COMPILE_STATUS, &shaderCompiled);
 
     if (!shaderCompiled) {
-        char errorBuffer[2048 + 1];
+        char errorBuffer[2048 + 1]{};
         m_realContext->glGetShaderInfoLog(handle, 2048, NULL, errorBuffer);
+        printf("%s\n%s\n", shaderFilename, errorBuffer);
+        assert(false);
 
         return YDS_ERROR_RETURN_MSG(ysError::VertexShaderCompilationError, errorBuffer);
     }
@@ -750,8 +754,10 @@ ysError ysOpenGLDevice::CreatePixelShader(ysShader **newShader, const char *shad
     m_realContext->glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &shaderCompiled);
 
     if (!shaderCompiled) {
-        char errorBuffer[2048 + 1];
+        char errorBuffer[2048 + 1]{};
         m_realContext->glGetShaderInfoLog(shaderHandle, 2048, NULL, errorBuffer);
+        printf("%s\n%s\n", shaderFilename, errorBuffer);
+        assert(false);
         return YDS_ERROR_RETURN_MSG(ysError::FragmentShaderCompilationError, errorBuffer);
     }
 
@@ -786,10 +792,12 @@ ysError ysOpenGLDevice::DestroyShaderProgram(ysShaderProgram *&program, bool des
 
     ysOpenGLShaderProgram *openglProgram = static_cast<ysOpenGLShaderProgram *>(program);
 
+#if 0
     for (int i = 0; i < (int)ysShader::ShaderType::NumShaderTypes; i++) {
         ysOpenGLShader *openglShader = static_cast<ysOpenGLShader *>(openglProgram->m_shaderSlots[i]);
         m_realContext->glDetachShader(openglProgram->m_handle, openglShader->m_handle);
     }
+#endif
 
     m_realContext->glDeleteProgram(openglProgram->m_handle);
 
@@ -816,7 +824,7 @@ ysError ysOpenGLDevice::LinkProgram(ysShaderProgram *program) {
     YDS_NESTED_ERROR_CALL(ysDevice::LinkProgram(program));
 
     ysOpenGLShaderProgram *openglProgram = static_cast<ysOpenGLShaderProgram *>(program);
-#if __EMSCRIPTEN__
+#if 1//__EMSCRIPTEN__
     // TODO: bodge these for now
     m_realContext->glBindAttribLocation(openglProgram->m_handle, 0, "in_Position");
     m_realContext->glBindAttribLocation(openglProgram->m_handle, 1, "in_Tex");
@@ -829,8 +837,10 @@ ysError ysOpenGLDevice::LinkProgram(ysShaderProgram *program) {
     m_realContext->glGetProgramiv(openglProgram->m_handle, GL_LINK_STATUS, &status);
 
     if (status == GL_FALSE) {
-        char errorBuffer[2048 + 1];
+        char errorBuffer[2048 + 1]{};
         m_realContext->glGetProgramInfoLog(openglProgram->m_handle, 2048, NULL, errorBuffer);
+        printf("%s\n%s\n", "failed to link", errorBuffer);
+        assert(false);
         return YDS_ERROR_RETURN_MSG(ysError::ProgramLinkError, errorBuffer);
     }
 
@@ -1237,7 +1247,7 @@ int ysOpenGLDevice::GetFramebufferName(int slot) {
 // TEMP
 void ysOpenGLDevice::Draw(int numFaces, int indexOffset, int vertexOffset) {
     if (m_activeVertexBuffer != nullptr) {
-#if __EMSCRIPTEN__
+#if 1//__EMSCRIPTEN__
         // GLES: no support for base vertex
         glDrawElements(GL_TRIANGLES, numFaces * 3, GL_UNSIGNED_SHORT, (void *)(indexOffset * 2));
 #else

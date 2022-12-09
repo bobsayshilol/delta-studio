@@ -22,7 +22,7 @@ ysError ysOpenGLSdlContext::CreateRenderingContext(ysOpenGLDevice *device, ysWin
     ysSdlWindow *sdlWindow = static_cast<ysSdlWindow *>(window);
 
     // TODO: more options here to match Windows impl
-#if __EMSCRIPTEN__
+#if 1//__EMSCRIPTEN__
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
